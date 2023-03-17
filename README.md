@@ -1,6 +1,6 @@
-# Mandlebrot-Wot 1.0.0
+# Mandlebrot-Wot 1.1.0
 
-WebAssembly Mandlebrot calculator.  
+WebAssembly Mandlebrot calculator.      
 
 ## Testing
 
