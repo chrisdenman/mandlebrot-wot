@@ -1,0 +1,43 @@
+{
+  "name": "@ceilingcat/mandlebrot-wot",
+  "engines": {
+    "node": ">=14.17.0"
+  },
+  "type": "module",
+  "version": "1.0.0",
+  "description": "WebAssembly Mandlebrot calculator",
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
+    "lint": "eslint"
+  },
+  "keywords": [
+    "Mandlebrot",
+    "wat",
+    "wasm",
+    "assembly"
+  ],
+  "author": {
+    "name": "Chris Denman",
+    "email": "chrisdenman@ceilingcat.co.uk"
+  },
+  "license": "Unlicense",
+  "devDependencies": {
+    "@jest/globals": "^29.4.3",
+    "eslint": "^8.33.0",
+    "jest": "^29.4.1",
+    "buffer": "^6.0.3",
+    "wabt": "^1.0.32"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisdenman/mandlebrot-wot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chrisdenman/mandlebrot-wot/issues",
+    "email": "chrisdenman@ceilingcat.co.uk"
+  },
+  "homepage": "https://github.com/chrisdenman/mandlebrot-wot",
+  "directories": {
+    "lib": "./src"
+  }
+}
