@@ -1,4 +1,4 @@
-# Mandlebrot-Wot 1.1.0
+# Mandlebrot-Wot 2.0.0
 
 WebAssembly Mandlebrot calculator.      
 

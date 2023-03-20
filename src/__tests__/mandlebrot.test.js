@@ -16,6 +16,21 @@ describe('Mandlebrot WASM Tests', () => {
     }) => await buildInstantiateWatModule(path.resolve("src/mandlebrot.wat"), imports);
 
     test(
+        "That writing a single value to a given location works",
+        () => wasmModule().then(({imports, exports}) => {
+            const [offset, xMin, y0, maxModulus, maxIterationCount, xInc, count] =
+                [3, -1.0, 0.2200000000000011, 2.0, 1000, 0.01, 1];
+            exports.mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
+            const received = new Uint32Array(imports.env.mem.buffer);
+            expect(
+                received.slice(offset, offset + count)
+            ).toEqual(Uint32Array.from([
+                jsMandlebrot(xMin + xInc+ xInc, y0, maxModulus, maxIterationCount)
+            ]));
+        })
+    );
+
+    test(
         "That the mandlebrotLine function produces results that are consistent with a known implementation",
         () => wasmModule().then(({imports, exports}) => {
             const [offset, xMin, y0, xMax, maxModulus, maxIterationCount, xInc, count] =

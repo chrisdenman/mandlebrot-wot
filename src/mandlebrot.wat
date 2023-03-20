@@ -110,7 +110,7 @@
             the results of which are stored as a run of 'count' i32 values starting at position 'count' in the 'env.mem'
             memory.
 
-            @param {number} offset - the byte offset into 'env.mem' to store the first result.
+            @param {number} offset - the i32 offset into 'env.mem' to store the first result.
             @param {number} count - how many results to calculate. This must be positive.
             @param {number} x0 - the real component of the first complex number.
             @param {number} y0 - the imaginary component of the complex numbers.
@@ -129,6 +129,13 @@
         (param $xInc f64)                               ;;      xInc: number,
         (param $maxModulus f64)                         ;;      maxModulus: number,
         (param $maxIterationCount i32)                  ;;      maxIterationCount: number)
+
+         (local.set $offset
+                (i32.mul
+                    (local.get $offset)
+                    (i32.const 4)
+                )
+            )
 
         (block $my_block
             (loop $while
