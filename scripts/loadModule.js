@@ -16,7 +16,7 @@ import path from "path";
  * @return {Promise<InstantiatedInfo>} - the imports provided and the instantiated module's exports
  */
 const buildInstantiateWatModule = (watPath, imports = {}) =>
-    compileWat(watPath)
+    compileWat(watPath, "build")
         .then(
             wasmFile => WebAssembly.compile(readFileSync(path.resolve(wasmFile)))
         )

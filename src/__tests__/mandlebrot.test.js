@@ -1,4 +1,3 @@
-
 import {describe, expect, test} from '@jest/globals';
 import path from 'path'
 import buildInstantiateWatModule from "../../scripts/loadModule.js";
@@ -7,21 +6,22 @@ describe('Mandlebrot WASM Tests', () => {
 
     const wasmModule = async (imports = {
         env: {
-            mem: new WebAssembly.Memory({
+            iterationData: new WebAssembly.Memory({
                 initial: 1,
                 maximum: 1,
                 shared: true
             })
         }
-    }) => await buildInstantiateWatModule(path.resolve("src/mandlebrot.wat"), imports);
+    }) => await buildInstantiateWatModule(path.resolve("src/Mandlebrot.wat"), imports);
 
     test(
         "That writing a single value to a given location works",
         () => wasmModule().then(({imports, exports}) => {
             const [offset, xMin, y0, maxModulus, maxIterationCount, xInc, count] =
                 [3, -1.0, 0.2200000000000011, 2.0, 1000, 0.01, 1];
+            // noinspection JSUnresolvedFunction
             exports.mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
-            const received = new Uint32Array(imports.env.mem.buffer);
+            const received = new Uint32Array(imports.env.iterationData.buffer);
             expect(
                 received.slice(offset, offset + count)
             ).toEqual(Uint32Array.from([
@@ -39,9 +39,10 @@ describe('Mandlebrot WASM Tests', () => {
             for (let x0 = xMin; x0 < xMax; x0 += xInc) {
                 lineData.push(jsMandlebrot(x0, y0, maxModulus, maxIterationCount));
             }
+            // noinspection JSUnresolvedFunction
             exports.mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
             expect(
-                new Uint32Array(imports.env.mem.buffer).slice(offset, count)
+                new Uint32Array(imports.env.iterationData.buffer).slice(offset, count)
             ).toEqual(
                 new Uint32Array(lineData)
             );
@@ -56,6 +57,7 @@ describe('Mandlebrot WASM Tests', () => {
                         [-2.0, -1.12, 0.47, 1.12, 2.0, 10000, 0.01, .01];
                     for (let x0 = xMin; x0 < xMax; x0 += xInc) {
                         for (let y0 = yMin; y0 < yMax; y0 += yInc) {
+                            // noinspection JSUnresolvedFunction
                             expect(
                                 exports.mandlebrotPoint(x0, y0, maxModulus, maxIterationCount)
                             ).toEqual(

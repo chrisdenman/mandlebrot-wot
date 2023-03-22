@@ -1,12 +1,9 @@
 (module
-    (import "env" "mem" (memory 1 1024 shared))
+    (import "env" "iterationData" (memory 1 1024 shared))
 
     (;
-        Calculates the number of iterations it takes for Mandlebrot's equation to be considered non-divergent for a
-        given complex number: <code>z0=x0 + iy0<code>.
-
-        A complex number is considered non-divergent if it takes less than 'maxIterationCount' iterations of
-        Mandlebrot's equation before its modulus exceeds or is equal to 'maxModulus'.
+        Calculates the number of iterations of Mandlebrot's equation to diverge for a given complex
+        number: <code>z0=x0 + iy0<code>.
 
         @param {number} x0 - the real components of the point
         @param {number} y0 - the imaginary components of the point
@@ -17,10 +14,10 @@
     ;)
     (func $mandlebrotPoint
         (export "mandlebrotPoint")                      ;; const mandlebrotPoint = function(
-        (param $x0 f64)                                 ;;      x0: number,
-        (param $y0 f64)                                 ;;      y0: number,
-        (param $maxModulus f64)                         ;;      maxModulus: number,
-        (param $maxIterationCount i32)                  ;;      maxIterationCount: number
+        (param $x0 f64)                                 ;;      x0: number,                         (double)
+        (param $y0 f64)                                 ;;      y0: number,                         (double)
+        (param $maxModulus f64)                         ;;      maxModulus: number,                 (double, >0)
+        (param $maxIterationCount i32)                  ;;      maxIterationCount: number           (int32, >0)
         (result i32)                                    ;; ): number
 
         (local $x f64)
@@ -107,11 +104,11 @@
 
         (;
             Invokes the function '$mandlebrotPoint' for a sequence of complex numbers of increasing 'x' for a given 'y',
-            the results of which are stored as a run of 'count' i32 values starting at position 'count' in the 'env.mem'
-            memory.
+            the results of which are stored as a run of 'count' i32 values starting at position 'count' in the
+            'env.iterationData' memory.
 
-            @param {number} offset - the i32 offset into 'env.mem' to store the first result.
-            @param {number} count - how many results to calculate. This must be positive.
+            @param {number} offset - the i32 offset into 'env.iterationData' to store the first result.
+            @param {number} count - how many results to calculate.
             @param {number} x0 - the real component of the first complex number.
             @param {number} y0 - the imaginary component of the complex numbers.
             @param {number} xInc - the amount to increment x0 by with each 'count' cycle.
@@ -122,13 +119,13 @@
         ;)
     (func
         (export "mandlebrotLine")                       ;; const mandlebrotLine = function(
-        (param $offset i32)                             ;;      offset: number,
-        (param $count i32)                              ;;      count: number,
-        (param $x0 f64)                                 ;;      x0: number,
-        (param $y0 f64)                                 ;;      y0: number,
-        (param $xInc f64)                               ;;      xInc: number,
-        (param $maxModulus f64)                         ;;      maxModulus: number,
-        (param $maxIterationCount i32)                  ;;      maxIterationCount: number)
+        (param $offset i32)                             ;;      offset: number,                     (int 32, >=0)
+        (param $count i32)                              ;;      count: number,                      (int 32, >0)
+        (param $x0 f64)                                 ;;      x0: number,                         (double)
+        (param $y0 f64)                                 ;;      y0: number,                         (double)
+        (param $xInc f64)                               ;;      xInc: number,                       (double)
+        (param $maxModulus f64)                         ;;      maxModulus: number,                 (double)
+        (param $maxIterationCount i32)                  ;;      maxIterationCount: number)          (int 32, >0)
 
          (local.set $offset
                 (i32.mul
