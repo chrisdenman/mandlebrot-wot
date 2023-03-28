@@ -20,7 +20,7 @@ describe('Mandlebrot WASM Tests', () => {
             const [offset, xMin, y0, maxModulus, maxIterationCount, xInc, count] =
                 [3, -1.0, 0.2200000000000011, 2.0, 1000, 0.01, 1];
             // noinspection JSUnresolvedFunction
-            exports.mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
+            mandlebrotExports(exports).mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
             const received = new Uint32Array(imports.env.iterationData.buffer);
             expect(
                 received.slice(offset, offset + count)
@@ -40,7 +40,7 @@ describe('Mandlebrot WASM Tests', () => {
                 lineData.push(jsMandlebrot(x0, y0, maxModulus, maxIterationCount));
             }
             // noinspection JSUnresolvedFunction
-            exports.mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
+            mandlebrotExports(exports).mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
             expect(
                 new Uint32Array(imports.env.iterationData.buffer).slice(offset, count)
             ).toEqual(
@@ -59,7 +59,7 @@ describe('Mandlebrot WASM Tests', () => {
                         for (let y0 = yMin; y0 < yMax; y0 += yInc) {
                             // noinspection JSUnresolvedFunction
                             expect(
-                                exports.mandlebrotPoint(x0, y0, maxModulus, maxIterationCount)
+                                mandlebrotExports(exports).mandlebrotPoint(x0, y0, maxModulus, maxIterationCount)
                             ).toEqual(
                                 jsMandlebrot(x0, y0, maxModulus, maxIterationCount)
                             )
@@ -82,4 +82,36 @@ describe('Mandlebrot WASM Tests', () => {
 
         return iterationCount;
     }
+
+    /**
+     * @param {Exports} mandlebrotExports
+     * @return MandlebrotExports
+     */
+    const mandlebrotExports = (mandlebrotExports) => mandlebrotExports
 });
+
+/**
+ * @typedef MandlebrotExports
+ * @property {MandlebrotPointFunction} mandlebrotPoint
+ * @property {MandlebrotLineFunction} mandlebrotLine
+ */
+
+/**
+ * @callback MandlebrotPointFunction
+ * @param {number} x0
+ * @param {number} y0
+ * @param {number} maxModulus
+ * @param {number} maxIterationCount
+ * @return {number}
+ */
+
+/**
+ * @callback MandlebrotLineFunction
+ * @param {number} offset
+ * @param {number} count
+ * @param {number} x0
+ * @param {number} y0
+ * @param {number} xInc
+ * @param {number} maxModulus
+ * @param {number} maxIterationCount
+ */

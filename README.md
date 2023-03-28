@@ -1,4 +1,4 @@
-# Mandlebrot-Wot 2.1.0
+# [Mandlebrot-Wot 2.1.1](https://github.com/chrisdenman/mandlebrot-wot)
 
 Mandlebrot set Web-Assembly routines packaged in two [WASM](https://webassembly.org/) modules:
 
@@ -52,7 +52,7 @@ another time (in JavaScript).
 
 ## Testing
 
-`npm test` (coverage outputs to the [coverage](coverage) folder, see [index.html](./coverage/lcov-report/index.html])
+`npm test` (coverage outputs to the [coverage](coverage) folder, see [index.html](./coverage/lcov-report/index.html)
 
 Every test re-: assembles and compiles every .wat file to facilitate the development workflow.
 

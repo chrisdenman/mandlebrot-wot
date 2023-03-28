@@ -23,13 +23,15 @@ describe('Mandlebrot WASM Tests', () => {
                 .then(({exports}) => {
                     const MAX_ITERATION_COUNT = 1000;
                     const ITERATION_DATA = [
-                        0xffffffff, MAX_ITERATION_COUNT + 1, MAX_ITERATION_COUNT, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+                        0xffffffff,
+                        MAX_ITERATION_COUNT - 1, MAX_ITERATION_COUNT, MAX_ITERATION_COUNT + 1,
+                        0, 1, 2, 3, 4, 5, 6, 7, 8, 9
                     ];
                     const MAX_ITERATION_COLOUR = 1;
                     const PALETTE = [0xff000000, 0x00ff00ff, 0x000000ff, 0x00ff0000];
                     buildMemory(MEMORY, ITERATION_DATA, PALETTE);
                     // noinspection JSUnresolvedFunction
-                    exports.iterationColouring(
+                    iterationColouringExports(exports).iterationColouring(
                         ITERATION_DATA.length,
                         MAX_ITERATION_COUNT,
                         MAX_ITERATION_COLOUR,
@@ -76,4 +78,23 @@ describe('Mandlebrot WASM Tests', () => {
         iterationData.forEach((value, index) => MEMORY_ARRAY[index] = value);
         palette.forEach((value, index) => MEMORY_ARRAY[ITERATION_DATA_LENGTH + index] = value);
     }
+
+    /**
+     * @param {Exports} iterationColouringExports
+     * @return IterationColouringExports
+     */
+    const iterationColouringExports = (iterationColouringExports) => iterationColouringExports
 });
+
+/**
+ * @typedef IterationColouringExports
+ * @property {IterationColouringFunction} iterationColouring
+ */
+
+/**
+ * @callback IterationColouringFunction
+ * @param {number} count
+ * @param {number} maxIterationCount
+ * @param {number} maxIterationColour
+ * @param {number} numPaletteEntries
+ */
