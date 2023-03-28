@@ -65,6 +65,7 @@ and [build/MandlebrotColouring.wasm](build/MandlebrotColouring.wasm) into the [b
 
 ## Future Work
 
+- Implement the "Optimized escape time algorithms" from ref. 1
 - See if there's any Web Assembly optimisations we can apply:
     - Is 'tee' faster?
 - If we are happy with 3 copies of the Mandlebrot data, we could thread the colouring:
@@ -72,6 +73,11 @@ and [build/MandlebrotColouring.wasm](build/MandlebrotColouring.wasm) into the [b
     2. RGBA data (shared Memory for threaded colouring)
     3. RGBA data (non-shared Memory for fast rendering)
 - Input validation and error code functionality?
+
+## References
+
+1. [Plotting algorithms for the Mandelbrot set](https://en.wikipedia.org/wiki/Plotting_algorithms_for_the_Mandelbrot_set)
+2. [MDN Web Docs - WebAssembly ](https://developer.mozilla.org/en-US/docs/WebAssembly)
 
 ## Version History
 
