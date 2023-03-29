@@ -67,8 +67,8 @@ and [build/MandlebrotColouring.wasm](build/MandlebrotColouring.wasm) into the [b
 
 - If we are happy with 3 copies of the Mandlebrot data, we could thread the colouring:
     1. Mandlebrot raw iteration data (shared Memory for threaded generation)
-    2. RGBA data (shared Memory for threaded colouring)
-    3. RGBA data (non-shared Memory for fast rendering)
+    2. Colour data (shared Memory for threaded colouring)
+    3. Colour data (non-shared Memory for fast rendering)
 - Input validation and error code functionality?
 
 ## References
