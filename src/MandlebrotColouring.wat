@@ -13,7 +13,7 @@
         The 'env.iterationAndPaletteData' memory must have the following layout.
 
             - 'count' i32 iteration data entries
-            - 'numPaletteEntries' i32 RGB encoded colours
+            - 'numPaletteEntries' i32 RGBA encoded colours
 
         @param {number} count - how many iteration data entries there are
         @param {number} maxIterationCount - the maximum iteration count present
@@ -25,7 +25,7 @@
         (export "iterationColouring")                       ;; const iterationColouring = function(
         (param $count i32)                                  ;;      count:                          (int 32, >0)
         (param $maxIterationCount i32)                      ;;      maxIterationCount:              (int 32, >0)
-        (param $maxIterationColour i32)                     ;;      maxIterationColour:             (int 32, RGBA)
+        (param $maxIterationColour i32)                     ;;      maxIterationColour:             (int 32, ABBR)
         (param $numPaletteEntries i32)                      ;;      numPaletteEntries:              (int 32, >0)
                                                             ;; ): void
 
@@ -50,18 +50,11 @@
             end
 
             (i32.lt_u
-                (local.get $maxIterationCount)
                 (i32.load (local.get $offset))
+                (local.get $maxIterationCount)
             )
             (if
                 (then
-                    (i32.store
-                        (local.get $offset)
-
-                        (local.get $maxIterationColour)
-                    )
-                )
-                (else
                     (i32.store
                         (local.get $offset)
 
@@ -74,7 +67,14 @@
                                 (local.get $paletteOffset)
                             )
                         )
-                   )
+                    )
+                )
+                (else
+                    (i32.store
+                        (local.get $offset)
+
+                        (local.get $maxIterationColour)
+                    )
                 )
             )
 

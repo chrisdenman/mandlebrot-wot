@@ -10,3 +10,4 @@
    build'. Renamed the WebAssembly Memory imports to something more useful. Updated the README.md. Better documentation
    for the '.wat' files. Added a package.json build target. Moved 'makeJSHexArray.sh' into the scripts directory.
 5. 2.1.1 - Added JSDoc type definitions for  module exports to assist with JavaScript integration.
+6. 3.0.0 - Implemented the "Optimised Escape Time Algorithm"

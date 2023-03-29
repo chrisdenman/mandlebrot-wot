@@ -20,12 +20,13 @@ describe('Mandlebrot WASM Tests', () => {
             const [offset, xMin, y0, maxModulus, maxIterationCount, xInc, count] =
                 [3, -1.0, 0.2200000000000011, 2.0, 1000, 0.01, 1];
             // noinspection JSUnresolvedFunction
-            mandlebrotExports(exports).mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
+            mandlebrotExports(exports)
+                .mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus * maxModulus, maxIterationCount);
             const received = new Uint32Array(imports.env.iterationData.buffer);
             expect(
                 received.slice(offset, offset + count)
             ).toEqual(Uint32Array.from([
-                jsMandlebrot(xMin + xInc+ xInc, y0, maxModulus, maxIterationCount)
+                jsMandlebrot(xMin + xInc + xInc, y0, maxModulus, maxIterationCount)
             ]));
         })
     );
@@ -39,14 +40,31 @@ describe('Mandlebrot WASM Tests', () => {
             for (let x0 = xMin; x0 < xMax; x0 += xInc) {
                 lineData.push(jsMandlebrot(x0, y0, maxModulus, maxIterationCount));
             }
-            // noinspection JSUnresolvedFunction
-            mandlebrotExports(exports).mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus, maxIterationCount);
+            mandlebrotExports(exports)
+                .mandlebrotLine(offset, count, xMin, y0, xInc, maxModulus * maxModulus, maxIterationCount);
             expect(
                 new Uint32Array(imports.env.iterationData.buffer).slice(offset, count)
             ).toEqual(
                 new Uint32Array(lineData)
             );
         })
+    );
+
+    test(
+        'That our naive and optimised JS mandlebrot point algorithms are consistent with each other',
+        () => {
+            const [xMin, yMin, xMax, yMax, maxModulus, maxIterationCount, xInc, yInc] =
+                [-2.0, -1.12, 0.47, 1.12, 2.0, 10000, 0.01, .01];
+            for (let x0 = xMin; x0 < xMax; x0 += xInc) {
+                for (let y0 = yMin; y0 < yMax; y0 += yInc) {
+                    expect(
+                        jsMandlebrotOptimised(x0, y0, maxModulus, maxIterationCount)
+                    ).toEqual(
+                        jsMandlebrot(x0, y0, maxModulus, maxIterationCount)
+                    )
+                }
+            }
+        }
     );
 
     test(
@@ -57,9 +75,9 @@ describe('Mandlebrot WASM Tests', () => {
                         [-2.0, -1.12, 0.47, 1.12, 2.0, 10000, 0.01, .01];
                     for (let x0 = xMin; x0 < xMax; x0 += xInc) {
                         for (let y0 = yMin; y0 < yMax; y0 += yInc) {
-                            // noinspection JSUnresolvedFunction
                             expect(
-                                mandlebrotExports(exports).mandlebrotPoint(x0, y0, maxModulus, maxIterationCount)
+                                mandlebrotExports(exports)
+                                    .mandlebrotPoint(x0, y0, maxModulus * maxModulus, maxIterationCount)
                             ).toEqual(
                                 jsMandlebrot(x0, y0, maxModulus, maxIterationCount)
                             )
@@ -71,18 +89,34 @@ describe('Mandlebrot WASM Tests', () => {
 
     const jsMandlebrot = function (x0, y0, maxModulus, maxIterationCount) {
         const maxModulusSquared = maxModulus * maxModulus;
-        let [x,y, iterationCount] = [0, 0, 0];
+        let [x, y, iteration] = [0, 0, 0];
 
-        while ((x * x + y * y < maxModulusSquared) && (iterationCount < maxIterationCount)) {
+        while ((x * x + y * y <= maxModulusSquared) && (iteration < maxIterationCount)) {
             let xTemp = x * x - y * y + x0;
             y = 2 * x * y + y0;
             x = xTemp;
-            iterationCount = iterationCount + 1;
+            iteration += 1;
         }
 
-        return iterationCount;
+        return iteration;
     }
 
+    const jsMandlebrotOptimised = function (x0, y0, maxModulus, maxIterationCount) {
+        let [x, y, x2, y2, iteration, maxModulusSquared] = [0, 0, 0, 0, 0, maxModulus * maxModulus];
+
+        while (x2 + y2 <= maxModulusSquared && iteration < maxIterationCount) {
+            y = 2 * x * y + y0;
+            x = x2 - y2 + x0;
+            x2 = x * x;
+            y2 = y * y;
+            iteration += 1
+        }
+
+        return iteration;
+    }
+
+
+    // noinspection JSValidateTypes
     /**
      * @param {Exports} mandlebrotExports
      * @return MandlebrotExports
@@ -100,7 +134,7 @@ describe('Mandlebrot WASM Tests', () => {
  * @callback MandlebrotPointFunction
  * @param {number} x0
  * @param {number} y0
- * @param {number} maxModulus
+ * @param {number} maxModulusSquared
  * @param {number} maxIterationCount
  * @return {number}
  */

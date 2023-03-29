@@ -37,6 +37,7 @@ describe('Mandlebrot WASM Tests', () => {
                         MAX_ITERATION_COLOUR,
                         PALETTE.length
                     );
+
                     expect(
                         new Uint32Array(MEMORY.buffer).slice(0, ITERATION_DATA.length)
                     ).toEqual(
@@ -63,7 +64,7 @@ describe('Mandlebrot WASM Tests', () => {
         (iterationData, maxIterationCount, maxIterationColour, palette) =>
             new Uint32Array(
                 iterationData.map(
-                    value => value > maxIterationCount ? maxIterationColour : palette[value % palette.length]
+                    value => value >= maxIterationCount ? maxIterationColour : palette[value % palette.length]
                 )
             );
 
@@ -79,6 +80,7 @@ describe('Mandlebrot WASM Tests', () => {
         palette.forEach((value, index) => MEMORY_ARRAY[ITERATION_DATA_LENGTH + index] = value);
     }
 
+    // noinspection JSValidateTypes
     /**
      * @param {Exports} iterationColouringExports
      * @return IterationColouringExports

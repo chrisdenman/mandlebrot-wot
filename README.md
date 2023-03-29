@@ -1,4 +1,4 @@
-# [Mandlebrot-Wot 2.1.1](https://github.com/chrisdenman/mandlebrot-wot)
+# [Mandlebrot-Wot 3.0.0](https://github.com/chrisdenman/mandlebrot-wot)
 
 Mandlebrot set Web-Assembly routines packaged in two [WASM](https://webassembly.org/) modules:
 
@@ -65,7 +65,7 @@ and [build/MandlebrotColouring.wasm](build/MandlebrotColouring.wasm) into the [b
 
 ## Future Work
 
-- Implement the "Optimized escape time algorithms" from ref. 1
+- Get rid of iteration count and use max iteration count decrements
 - See if there's any Web Assembly optimisations we can apply:
     - Is 'tee' faster?
 - If we are happy with 3 copies of the Mandlebrot data, we could thread the colouring:
