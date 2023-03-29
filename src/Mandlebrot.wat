@@ -35,6 +35,12 @@
 
         (block $my_block
             (loop $while
+                (i32.ge_u
+                    (local.get $iterationCount)
+                    (local.get $maxIterationCount)
+                )
+                br_if $my_block
+
                 (f64.gt
                     (f64.add
                         (local.get $x2)
@@ -43,18 +49,10 @@
 
                     (local.get $maxModulusSquared)
                 )
-
-                br_if $my_block
-
-                (i32.ge_u
-                    (local.get $iterationCount)
-                    (local.get $maxIterationCount)
-                )
-
                 br_if $my_block
 
                 ;; y = 2 * x * y + y0
-                (local.set
+                (local.tee
                     $y
                     (f64.add
                         (f64.mul
@@ -66,10 +64,10 @@
                         )
                         (local.get $y0)
                     )
-                )
+                )                                           ;; [y]
 
-                ;; x = x2 - y2 + x0
-                (local.set
+                ;; x = x2 - y2 + x0                         ;; [x,y]
+                (local.tee
                     $x
                     (f64.add
                         (f64.sub
@@ -81,22 +79,14 @@
                 )
 
                 ;; x2 = x * x
-                (local.set
-                    $x2
-                    (f64.mul
-                        (local.get $x)
-                        (local.get $x)
-                    )
-                )
+                local.get $x                                ;; [x,x,y]
+                f64.mul                                     ;; [x*x,y]
+                local.set $x2                               ;; [y]
 
                 ;; y2 = y * y
-                (local.set
-                    $y2
-                    (f64.mul
-                        (local.get $y)
-                        (local.get $y)
-                    )
-                )
+                local.get $y                                ;; [y,y]
+                f64.mul                                     ;; [y*y]
+                local.set $y2                               ;; []
 
                 ;; iterationCount += 1
                 (local.set $iterationCount
@@ -189,6 +179,4 @@
             )
         )
     )
-
-
 )

@@ -65,9 +65,6 @@ and [build/MandlebrotColouring.wasm](build/MandlebrotColouring.wasm) into the [b
 
 ## Future Work
 
-- Get rid of iteration count and use max iteration count decrements
-- See if there's any Web Assembly optimisations we can apply:
-    - Is 'tee' faster?
 - If we are happy with 3 copies of the Mandlebrot data, we could thread the colouring:
     1. Mandlebrot raw iteration data (shared Memory for threaded generation)
     2. RGBA data (shared Memory for threaded colouring)
