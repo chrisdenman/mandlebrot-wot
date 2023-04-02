@@ -1,16 +1,13 @@
 import {describe, expect, test} from '@jest/globals';
 import path from 'path'
 import buildInstantiateWatModule from "../../scripts/loadModule.js";
+import MemoryHelper from "../MemoryHelper.js";
 
 describe('Mandlebrot WASM Tests', () => {
 
     const wasmModule = async (imports = {
         env: {
-            iterationData: new WebAssembly.Memory({
-                initial: 1,
-                maximum: 1,
-                shared: true
-            })
+            iterationData: MemoryHelper.fromDescriptor(MemoryHelper.memoryDescriptor(1, 1, true))
         }
     }) => await buildInstantiateWatModule(path.resolve("src/Mandlebrot.wat"), imports);
 

@@ -1,51 +1,46 @@
 import {describe, expect, test} from '@jest/globals';
 import path from 'path'
 import buildInstantiateWatModule from "../../scripts/loadModule.js";
+import MemoryHelper from "../MemoryHelper.js";
 
 describe('Mandlebrot WASM Tests', () => {
 
     const wasmModule = async (imports = {
         env: {
-            iterationAndPaletteData: new WebAssembly.Memory({
-                initial: 1,
-                maximum: 1
-            })
+            iterationAndPaletteData: MemoryHelper.fromDescriptor(MemoryHelper.memoryDescriptor(1, 1))
         }
     }) => await buildInstantiateWatModule(path.resolve("src/MandlebrotColouring.wat"), imports);
 
     test(
         "That the iterationColouring function fills 'count' 32 bit words with red", async () => {
-            const MEMORY = new WebAssembly.Memory({
-                initial: 1,
-                maximum: 1
-            });
-            await wasmModule({env: {iterationAndPaletteData: MEMORY}})
+            const memory = MemoryHelper.fromDescriptor(MemoryHelper.memoryDescriptor(1, 1));
+            await wasmModule({env: {iterationAndPaletteData: memory}})
                 .then(({exports}) => {
-                    const MAX_ITERATION_COUNT = 1000;
-                    const ITERATION_DATA = [
+                    const setInclusionIterationCount = 1000;
+                    const iterationData = [
                         0xffffffff,
-                        MAX_ITERATION_COUNT - 1, MAX_ITERATION_COUNT, MAX_ITERATION_COUNT + 1,
+                        setInclusionIterationCount - 1, setInclusionIterationCount, setInclusionIterationCount + 1,
                         0, 1, 2, 3, 4, 5, 6, 7, 8, 9
                     ];
-                    const MAX_ITERATION_COLOUR = 1;
-                    const PALETTE = [0xff000000, 0x00ff00ff, 0x000000ff, 0x00ff0000];
-                    buildMemory(MEMORY, ITERATION_DATA, PALETTE);
+                    const setInclusionColour = 1;
+                    const palette = [0xff000000, 0x00ff00ff, 0x000000ff, 0x00ff0000];
+                    buildMemory(memory, iterationData, palette);
                     // noinspection JSUnresolvedFunction
                     iterationColouringExports(exports).iterationColouring(
-                        ITERATION_DATA.length,
-                        MAX_ITERATION_COUNT,
-                        MAX_ITERATION_COLOUR,
-                        PALETTE.length
+                        iterationData.length,
+                        setInclusionIterationCount,
+                        setInclusionColour,
+                        palette.length
                     );
 
                     expect(
-                        new Uint32Array(MEMORY.buffer).slice(0, ITERATION_DATA.length)
+                        new Uint32Array(memory.buffer).slice(0, iterationData.length)
                     ).toEqual(
                         getMemoryExpectation(
-                            ITERATION_DATA,
-                            MAX_ITERATION_COUNT,
-                            MAX_ITERATION_COLOUR,
-                            PALETTE
+                            iterationData,
+                            setInclusionIterationCount,
+                            setInclusionColour,
+                            palette
                         )
                     );
                 })
@@ -54,17 +49,17 @@ describe('Mandlebrot WASM Tests', () => {
 
     /**
      * @param {number[]} iterationData
-     * @param {number} maxIterationCount
-     * @param {number} maxIterationColour
+     * @param {number} setInclusionIterationCount
+     * @param {number} setInclusionColour
      * @param {number[]} palette
      *
      * @return {Uint32Array}
      */
     const getMemoryExpectation =
-        (iterationData, maxIterationCount, maxIterationColour, palette) =>
+        (iterationData, setInclusionIterationCount, setInclusionColour, palette) =>
             new Uint32Array(
                 iterationData.map(
-                    value => value >= maxIterationCount ? maxIterationColour : palette[value % palette.length]
+                    value => value >= setInclusionIterationCount ? setInclusionColour : palette[value % palette.length]
                 )
             );
 
@@ -74,10 +69,10 @@ describe('Mandlebrot WASM Tests', () => {
      * @param {number[]} palette
      */
     const buildMemory = (memory, iterationData, palette) => {
-        const MEMORY_ARRAY = new Uint32Array(memory.buffer);
-        const ITERATION_DATA_LENGTH = iterationData.length;
-        iterationData.forEach((value, index) => MEMORY_ARRAY[index] = value);
-        palette.forEach((value, index) => MEMORY_ARRAY[ITERATION_DATA_LENGTH + index] = value);
+        const memoryArray = new Uint32Array(memory.buffer);
+        const iterationDataLength = iterationData.length;
+        iterationData.forEach((value, index) => memoryArray[index] = value);
+        palette.forEach((value, index) => memoryArray[iterationDataLength + index] = value);
     }
 
     // noinspection JSValidateTypes

@@ -12,3 +12,5 @@
 5. 2.1.1 - Added JSDoc type definitions for module exports to assist with JavaScript integration.
 6. 3.0.0 - Implemented the "Optimised Escape Time Algorithm". Using 'tee' to reduce local variable instructions in '
    mandlebrotPoint'. Moved the i32 test to the first position in 'mandlebrotPoint'.
+7. 3.1.0 - Added 'BoxScale.wat' WebAssembly script that export 'boxScale' for box scaling images. Added '
+   MemoryHelper.js' for common WebAssembly memory JS code.

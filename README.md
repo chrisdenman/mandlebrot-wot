@@ -1,14 +1,16 @@
 # [Mandlebrot-Wot 3.0.0](https://github.com/chrisdenman/mandlebrot-wot)
 
-Mandlebrot set Web-Assembly routines packaged in two [WASM](https://webassembly.org/) modules:
+Mandlebrot set WebAssembly script routines packaged in three [WASM](https://webassembly.org/) modules:
 
 - `Mandlebrot.wasm` which exposes the functions:
-    - [mandlebrotPoint](src/Mandlebrot.wat) - for calculating the number of iterations for a given complex number.
-    - [mandlebrotLine](src/Mandlebrot.wat) - which invokes `mandlebrotPoint` for a run of points with a shared y
+    - [mandlebrotPoint](./src/Mandlebrot.wat) - for calculating the number of iterations for a given complex number.
+    - [mandlebrotLine](./src/Mandlebrot.wat) - which invokes `mandlebrotPoint` for a run of points with a shared y
       coordinate.
 - `MandlebrotColouring.wasm` which exposes the functions:
-    - [iterationColouring](src/MandlebrotColouring.wat) - for mutating iteration data presumably produced
+    - [iterationColouring](./src/MandlebrotColouring.wat) - for mutating iteration data presumably produced
       by `mandlebrotLine` into RGBA colours.
+- 'BoxScale.wasm' which exposes the functions:
+  -  [boxScale](./src/BoxScale.wat) - for down-scaling images.
 
 Please follow the links above for more detailed information.
 
@@ -52,7 +54,7 @@ another time (in JavaScript).
 
 ## Testing
 
-`npm test` (coverage outputs to the [coverage](coverage) folder, see [index.html](./coverage/lcov-report/index.html)
+`npm test` (coverage outputs to the [coverage](./coverage) folder, see [index.html](./coverage/lcov-report/index.html)
 
 Every test re-: assembles and compiles every .wat file to facilitate the development workflow.
 
@@ -60,8 +62,9 @@ Every test re-: assembles and compiles every .wat file to facilitate the develop
 
 `npm run lint`
 
-This will produce [build/Mandlebrot.wasm](build/Mandlebrot.wasm)
-and [build/MandlebrotColouring.wasm](build/MandlebrotColouring.wasm) into the [build](./build) directory.
+This will produce [build/Mandlebrot.wasm](./build/Mandlebrot.wasm)
+and [build/MandlebrotColouring.wasm](./build/MandlebrotColouring.wasm) into the [build](./build) directory.
+
 
 ## Future Work
 
