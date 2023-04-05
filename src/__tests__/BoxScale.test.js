@@ -19,6 +19,7 @@ describe('Image Scaling Tests', () => {
                 checkScaling(extents(32, 16), extents(5, 7)),
                 checkScaling(extents(47, 33), extents(17, 11)),
                 checkScaling(extents(382, 73), extents(11, 72)),
+                checkScaling(extents(2000, 2000), extents(100, 100)),
             ])
         }
     );
@@ -34,7 +35,9 @@ const checkScaling = async ({w: sourceWidth, h: sourceHeight}, {w: targetWidth, 
     const numTargetPixels = targetWidth * targetHeight;
     const numTotalPixels = numSourcePixels + numTargetPixels;
     const wasmMemory = MemoryHelper.fromDescriptor(MemoryHelper.memoryDescriptor(
-        MemoryHelper.pagesRequired(numTotalPixels << 2)
+        MemoryHelper.pagesRequired(numTotalPixels << 2),
+        1024,
+        true
     ));
 
     MemoryHelper.populate(wasmMemory, imageData);

@@ -7,16 +7,23 @@
  *
  * @return {number} the average of the given region's pixels RGBA value
  */
-const boxAverage = (imageData, imageWidth, region) => {
-    let average = 0;
-    const numSamples = region.w * region.h;
-    for (let xO = region.x; xO <= region.x + region.w - 1; xO++) {
-        for (let yO = region.y; yO <= region.y + region.h - 1; yO++) {
-            average += imageData[(yO * imageWidth + xO)] / numSamples;
+const boxAverage = (imageData, imageWidth, {x, y, w, h}) => {
+    let average0 = 0;
+    let average1 = 0;
+    let average2 = 0;
+    let average3 = 0;
+    const numSamples = w * h;
+    for (let xO = x; xO <= x + w - 1; xO++) {
+        for (let yO = y; yO <= y + h - 1; yO++) {
+            let sample = imageData[(yO * imageWidth + xO)];
+            average0 += ((sample & 0xFF) / numSamples);
+            average1 += ((sample >>= 8) & 0xFF) / numSamples;
+            average2 += ((sample >>= 8) & 0xFF) / numSamples;
+            average3 += ((sample >>= 8) & 0xFF) / numSamples;
         }
     }
 
-    return Math.floor(average);
+    return Math.trunc(average3 << 24) | (average2 << 16) | (average1 << 8) | average0;
 }
 
 /**

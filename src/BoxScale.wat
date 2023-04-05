@@ -1,5 +1,5 @@
 (module
-    (import "env" "imageAndThumbnail" (memory 1 1024))
+    (import "env" "imageAndThumbnail" (memory 1 1024 shared))
 
     (;
         Scales down an image from 'sourceWidth' by 'sourceHeight' pixels to 'targetWidth' by 'targetHeight' pixels.
@@ -168,9 +168,12 @@
         (param $h i32)                                      ;;      h:              (int 32, >0)
         (result i32)                                        ;; ): number
 
-        (local $numPixels i32)
+        (local $numPixels f64)
 
-        (local $average f64)
+        (local $average0 f64)
+        (local $average1 f64)
+        (local $average2 f64)
+        (local $average3 f64)
 
         (local $byteOffset i32)
         (local $xO i32)
@@ -178,9 +181,11 @@
 
         (local.set
             $numPixels
-            (i32.mul
-                (local.get $w)
-                (local.get $h)
+            (f64.convert_i32_u
+                (i32.mul
+                    (local.get $w)
+                    (local.get $h)
+                )
             )
         )
 
@@ -234,12 +239,60 @@
                         )
 
                         (local.set
-                            $average
+                            $average0
                             (f64.add
-                                (local.get $average)
+                                (local.get $average0)
                                 (f64.div
-                                    (f64.convert_i32_u (i32.load (local.get $byteOffset)))
-                                    (f64.convert_i32_u (local.get $numPixels))
+                                    (f64.convert_i32_u (i32.and (i32.load (local.get $byteOffset)) (i32.const 0xFF)))
+                                    (local.get $numPixels)
+                                )
+                            )
+                        )
+
+                        (local.set
+                            $average1
+                            (f64.add
+                                (local.get $average1)
+                                (f64.div
+                                    (f64.convert_i32_u
+                                        (i32.and
+                                            (i32.shr_u (i32.load (local.get $byteOffset)) (i32.const 8))
+                                            (i32.const 0xFF)
+                                        )
+                                    )
+                                    (local.get $numPixels)
+                                )
+                            )
+                        )
+
+                        (local.set
+                            $average2
+                            (f64.add
+                                (local.get $average2)
+                                (f64.div
+                                    (f64.convert_i32_u
+                                        (i32.and
+                                            (i32.shr_u (i32.load (local.get $byteOffset)) (i32.const 16))
+                                            (i32.const 0xFF)
+                                        )
+                                    )
+                                    (local.get $numPixels)
+                                )
+                            )
+                        )
+
+                        (local.set
+                            $average3
+                            (f64.add
+                                (local.get $average3)
+                                (f64.div
+                                    (f64.convert_i32_u
+                                        (i32.and
+                                            (i32.shr_u (i32.load (local.get $byteOffset)) (i32.const 24))
+                                            (i32.const 0xFF)
+                                        )
+                                    )
+                                    (local.get $numPixels)
                                 )
                             )
                         )
@@ -268,6 +321,15 @@
             )
         )
 
-        (i32.trunc_f64_u (f64.floor (local.get $average)))
+        (i32.or
+            (i32.shl (i32.trunc_f64_u (local.get $average3)) (i32.const 24))
+            (i32.or
+                (i32.shl (i32.trunc_f64_u (local.get $average2)) (i32.const 16))
+                (i32.or
+                    (i32.shl (i32.trunc_f64_u (local.get $average1)) (i32.const 8))
+                    (i32.trunc_f64_u (local.get $average0))
+                )
+            )
+        )
     )
 )

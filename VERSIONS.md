@@ -14,3 +14,6 @@
    mandlebrotPoint'. Moved the i32 test to the first position in 'mandlebrotPoint'.
 7. 3.1.0 - Added 'BoxScale.wat' WebAssembly script that export 'boxScale' for box scaling images. Added '
    MemoryHelper.js' for common WebAssembly memory JS code.
+8. 4.0.0 - Fixed a bug in 'boxScale' (and the corresponding WebAssembly Script function) whereby it wasn't treating RGBA
+   components separately, leading to errors bleeding between components. Removed the 'homepage' package.json entry. Made
+   the memory shared so that it can be run via a WebWorker.

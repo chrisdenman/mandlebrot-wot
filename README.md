@@ -1,4 +1,4 @@
-# [Mandlebrot-Wot 3.0.0](https://github.com/chrisdenman/mandlebrot-wot)
+# [Mandlebrot-Wot 4.0.0](https://github.com/chrisdenman/mandlebrot-wot)
 
 Mandlebrot set WebAssembly script routines packaged in three [WASM](https://webassembly.org/) modules:
 
@@ -9,7 +9,7 @@ Mandlebrot set WebAssembly script routines packaged in three [WASM](https://weba
 - `MandlebrotColouring.wasm` which exposes the functions:
     - [iterationColouring](./src/MandlebrotColouring.wat) - for mutating iteration data presumably produced
       by `mandlebrotLine` into RGBA colours.
-- 'BoxScale.wasm' which exposes the functions:
+- 'BoxScale.wasm' which exposes the function:
   -  [boxScale](./src/BoxScale.wat) - for down-scaling images.
 
 Please follow the links above for more detailed information.

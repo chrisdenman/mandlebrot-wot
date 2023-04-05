@@ -4,7 +4,7 @@
     "node": ">=14.17.0"
   },
   "type": "module",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "WebAssembly Mandlebrot calculator",
   "scripts": {
     "build": "node src/build.js",
@@ -37,7 +37,6 @@
     "url": "https://github.com/chrisdenman/mandlebrot-wot/issues",
     "email": "chrisdenman@ceilingcat.co.uk"
   },
-  "homepage": "https://github.com/chrisdenman/mandlebrot-wot",
   "directories": {
     "lib": "./src"
   }
