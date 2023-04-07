@@ -43,6 +43,7 @@ export default class MemoryHelper {
         return memory;
     }
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Either grows an existing <code>WebAssembly.Memory</code> or creates a new one.
      *

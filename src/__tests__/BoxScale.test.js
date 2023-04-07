@@ -92,19 +92,6 @@ const randomImageData = length => {
 }
 
 /**
- * @typedef ImageScalingExports
- * @property {BoxScaleFunction} boxScale
- */
-
-/**
- * @callback BoxScaleFunction
- * @param {number} sourceWidth
- * @param {number} sourceHeight
- * @param {number} targetWidth
- * @param {number} targetHeight
- */
-
-/**
  * @typedef Extents
  * @property w
  * @property h

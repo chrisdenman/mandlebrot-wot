@@ -1,4 +1,4 @@
-# [Mandlebrot-Wot 4.0.0](https://github.com/chrisdenman/mandlebrot-wot)
+# [Mandlebrot-Wot 4.0.1](https://github.com/chrisdenman/mandlebrot-wot)
 
 Mandlebrot set WebAssembly script routines packaged in three [WASM](https://webassembly.org/) modules:
 

@@ -7,7 +7,7 @@
         Operation:
 
             - For each 'iterationData' entry:
-                - if value > 'maxIterationCount', change its value to 'maxIterationColour'
+                - if value > 'maxIterationCount', change its value to 'mandlebrotColour'
                 - , else change its value to the palette entry located at colour offset value % numPaletteEntries
 
         The 'env.iterationAndPaletteData' memory must have the following layout.
@@ -17,7 +17,7 @@
 
         @param {number} count - how many iteration data entries there are
         @param {number} maxIterationCount - the maximum iteration count present
-        @param {number} maxIterationColour - the colour to assign to 'maxIterationCount' valued iteration counts
+        @param {number} mandlebrotColour -  the colour to assign to point that are in the Mandlebrot set proper
         @param {number} numPaletteEntries - the number of palette entries
 
     ;)
@@ -25,7 +25,7 @@
         (export "iterationColouring")                       ;; const iterationColouring = function(
         (param $count i32)                                  ;;      count:                          (int 32, >0)
         (param $maxIterationCount i32)                      ;;      maxIterationCount:              (int 32, >0)
-        (param $maxIterationColour i32)                     ;;      maxIterationColour:             (int 32, ABBR)
+        (param $mandlebrotColour i32)                       ;;      mandlebrotColour:             (int 32, ABBR)
         (param $numPaletteEntries i32)                      ;;      numPaletteEntries:              (int 32, >0)
                                                             ;; ): void
 
@@ -73,7 +73,7 @@
                     (i32.store
                         (local.get $offset)
 
-                        (local.get $maxIterationColour)
+                        (local.get $mandlebrotColour)
                     )
                 )
             )

@@ -120,29 +120,3 @@ describe('Mandlebrot WASM Tests', () => {
      */
     const mandlebrotExports = (mandlebrotExports) => mandlebrotExports
 });
-
-/**
- * @typedef MandlebrotExports
- * @property {MandlebrotPointFunction} mandlebrotPoint
- * @property {MandlebrotLineFunction} mandlebrotLine
- */
-
-/**
- * @callback MandlebrotPointFunction
- * @param {number} x0
- * @param {number} y0
- * @param {number} maxModulusSquared
- * @param {number} maxIterationCount
- * @return {number}
- */
-
-/**
- * @callback MandlebrotLineFunction
- * @param {number} offset
- * @param {number} count
- * @param {number} x0
- * @param {number} y0
- * @param {number} xInc
- * @param {number} maxModulus
- * @param {number} maxIterationCount
- */

@@ -17,3 +17,4 @@
 8. 4.0.0 - Fixed a bug in 'boxScale' (and the corresponding WebAssembly Script function) whereby it wasn't treating RGBA
    components separately, leading to errors bleeding between components. Removed the 'homepage' package.json entry. Made
    the memory shared so that it can be run via a WebWorker.
+9. 4.0.1 - Renamed 'maxIterationColour'>'mandlebrotColour'. npm update. Moved the JSDoc types to separate file.

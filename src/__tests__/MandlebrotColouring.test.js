@@ -83,15 +83,3 @@ describe('Mandlebrot WASM Tests', () => {
     const iterationColouringExports = (iterationColouringExports) => iterationColouringExports
 });
 
-/**
- * @typedef IterationColouringExports
- * @property {IterationColouringFunction} iterationColouring
- */
-
-/**
- * @callback IterationColouringFunction
- * @param {number} count
- * @param {number} maxIterationCount
- * @param {number} maxIterationColour
- * @param {number} numPaletteEntries
- */
